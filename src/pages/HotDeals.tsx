@@ -80,6 +80,10 @@ const HotDeals = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-orange-600">Hot Deals</h1>
+      {/* Hero Banner Ad Placement */}
+      <div className="w-full bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 text-center">
+        <h2 className="text-2xl text-gray-500 font-semibold">Advertise Here</h2>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {hotDeals.map((deal) => (
           <Link
