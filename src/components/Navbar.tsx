@@ -63,16 +63,16 @@ const Navbar: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex items-center space-x-4">
               <Link
-                to="/login"
+                to="/post-ad"
                 className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-200"
               >
-                Sign in
+                Post Ad
               </Link>
               <Link
-                to="/post-ad"
-                className="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-md text-sm font-medium"
+                to="/login"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:border-gray-400 hover:bg-gray-50 transition duration-200"
               >
-                Post Ad
+                Sign in
               </Link>
             </div>
           </div>
