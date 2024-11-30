@@ -196,77 +196,99 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Listings Section */}
-      <section className="container mx-auto px-4 mt-12">
-        <Link to="/featured" className="inline-block">
-          <h2 className="text-2xl font-bold mb-6 text-purple-600 hover:text-purple-500 transition-colors duration-300">
-            Featured Items
-            <span className="ml-2 text-sm">&rarr;</span>
-          </h2>
-        </Link>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedFeaturedListings.map((listing) => (
-            <Link
-              key={listing.id}
-              to={`/listing/${listing.id}`}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-              onClick={() => handleListingClick(listing.id, false)}
-            >
-              <div className="relative h-48">
-                <img
-                  src={listing.images[0]}
-                  alt={listing.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-xl font-semibold mb-2 text-purple-600">{listing.title}</h3>
-                <p className="text-gray-600 mb-2">{listing.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-purple-600 font-bold">${listing.price.toLocaleString()}</span>
-                  <span className="text-gray-500 text-sm">{listing.views} views</span>
-                </div>
-              </div>
-            </Link>
-          ))}
+      <div className="container mx-auto px-4 py-8">
+        {/* Top Hero Banner Ad */}
+        <div className="w-full bg-gray-700 border-2 border-dashed border-gray-600 rounded-lg p-12 mb-8 text-center">
+          <h2 className="text-2xl text-white font-semibold">Advertise Here</h2>
         </div>
-      </section>
 
-      {/* Hot Deals Section */}
-      <section className="container mx-auto px-4 mt-12 mb-12">
-        <Link to="/hot-deals" className="inline-block">
-          <h2 className="text-2xl font-bold mb-6 text-orange-600 hover:text-orange-500 transition-colors duration-300">
-            Hot Deals
-            <span className="ml-2 text-sm">&rarr;</span>
-          </h2>
-        </Link>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {displayedDealsListings.map((deal) => (
-            <Link
-              key={deal.id}
-              to={`/listing/${deal.id}`}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-              onClick={() => handleListingClick(deal.id, true)}
-            >
-              <div className="relative h-40">
-                <img
-                  src={deal.images[0]}
-                  alt={deal.title}
-                  className="w-full h-full object-cover"
-                />
+        <div className="flex gap-8">
+          {/* Left Column - Square Ads */}
+          <div className="hidden md:flex flex-col gap-4 w-64">
+            <div className="bg-gray-700 border-2 border-dashed border-gray-600 rounded-lg p-8 text-center aspect-square">
+              <h3 className="text-lg text-white font-semibold">Square Ad</h3>
+            </div>
+            <div className="bg-gray-700 border-2 border-dashed border-gray-600 rounded-lg p-8 text-center aspect-square">
+              <h3 className="text-lg text-white font-semibold">Square Ad</h3>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Featured Listings Section */}
+            <section className="container mx-auto px-4 mt-12">
+              <Link to="/featured" className="inline-block">
+                <h2 className="text-2xl font-bold mb-6 text-purple-600 hover:text-purple-500 transition-colors duration-300">
+                  Featured Items
+                  <span className="ml-2 text-sm">&rarr;</span>
+                </h2>
+              </Link>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedFeaturedListings.map((listing) => (
+                  <Link
+                    key={listing.id}
+                    to={`/listing/${listing.id}`}
+                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                    onClick={() => handleListingClick(listing.id, false)}
+                  >
+                    <div className="relative h-48">
+                      <img
+                        src={listing.images[0]}
+                        alt={listing.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-xl font-semibold mb-2 text-purple-600">{listing.title}</h3>
+                      <p className="text-gray-600 mb-2">{listing.description}</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-purple-600 font-bold">${listing.price.toLocaleString()}</span>
+                        <span className="text-gray-500 text-sm">{listing.views} views</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2 text-orange-600">{deal.title}</h3>
-                <p className="text-gray-600 text-sm mb-2">{deal.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-orange-600 font-bold">${deal.price.toLocaleString()}</span>
-                  <span className="text-gray-500 text-sm">{deal.views} views</span>
-                </div>
+            </section>
+
+            {/* Hot Deals Section */}
+            <section className="container mx-auto px-4 mt-12 mb-12">
+              <Link to="/hot-deals" className="inline-block">
+                <h2 className="text-2xl font-bold mb-6 text-orange-600 hover:text-orange-500 transition-colors duration-300">
+                  Hot Deals
+                  <span className="ml-2 text-sm">&rarr;</span>
+                </h2>
+              </Link>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {displayedDealsListings.map((deal) => (
+                  <Link
+                    key={deal.id}
+                    to={`/listing/${deal.id}`}
+                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                    onClick={() => handleListingClick(deal.id, true)}
+                  >
+                    <div className="relative h-40">
+                      <img
+                        src={deal.images[0]}
+                        alt={deal.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold mb-2 text-orange-600">{deal.title}</h3>
+                      <p className="text-gray-600 text-sm mb-2">{deal.description}</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-orange-600 font-bold">${deal.price.toLocaleString()}</span>
+                        <span className="text-gray-500 text-sm">{deal.views} views</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            </Link>
-          ))}
+            </section>
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
