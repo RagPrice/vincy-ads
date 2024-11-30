@@ -184,10 +184,10 @@ const Home: React.FC = () => {
               <Link
                 key={category.id}
                 to={`/category/${category.id}`}
-                className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <Icon className="w-8 h-8 text-blue-600 mb-2" />
-                <span className="text-sm text-center font-medium text-gray-700 text-gradient-hover capitalize">
+                <span className="text-sm text-center font-medium text-gray-700 capitalize">
                   {category.name}
                 </span>
               </Link>
