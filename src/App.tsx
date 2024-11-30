@@ -9,6 +9,7 @@ import PostAd from './pages/PostAd';
 import ListingDetail from './pages/ListingDetail';
 import SearchResults from './pages/SearchResults';
 import Signup from './pages/Signup';
+import Login from './pages/Login';
 import FeaturedItems from './pages/FeaturedItems';
 import HotDeals from './pages/HotDeals';
 
@@ -21,6 +22,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/terms" element={<Terms />} />
