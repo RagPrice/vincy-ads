@@ -4,25 +4,25 @@ import { incrementViews } from '../utils/storage';
 import { Listing, CATEGORIES } from '../types';
 import { getFeaturedListings, getHotDeals } from '../utils/storage';
 import {
-  HomeIcon,
-  ComputerDesktopIcon,
-  ShoppingBagIcon,
-  BriefcaseIcon,
-  WrenchIcon,
-  TagIcon,
-  ArchiveBoxIcon,
-} from '@heroicons/react/24/outline';
-import CarIcon from '../components/icons/CarIcon';
+  Car,
+  Home as HomeIcon,
+  Laptop,
+  Sofa,
+  Briefcase,
+  Wrench,
+  ShoppingBag,
+  Package
+} from 'lucide-react';
 
 const CATEGORY_ICONS = {
-  'vehicles': CarIcon,
+  'vehicles': Car,
   'property': HomeIcon,
-  'electronics': ComputerDesktopIcon,
-  'furniture': ShoppingBagIcon,
-  'jobs': BriefcaseIcon,
-  'services': WrenchIcon,
-  'fashion': TagIcon,
-  'others': ArchiveBoxIcon
+  'electronics': Laptop,
+  'furniture': Sofa,
+  'jobs': Briefcase,
+  'services': Wrench,
+  'fashion': ShoppingBag,
+  'others': Package
 };
 
 const mockFeatured = [
