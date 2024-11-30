@@ -3,6 +3,27 @@ import { Link } from 'react-router-dom';
 import { incrementViews } from '../utils/storage';
 import { Listing, CATEGORIES } from '../types';
 import { getFeaturedListings, getHotDeals } from '../utils/storage';
+import {
+  TruckIcon,
+  HomeIcon,
+  ComputerDesktopIcon,
+  ShoppingBagIcon,
+  BriefcaseIcon,
+  WrenchIcon,
+  ShirtIcon,
+  ArchiveBoxIcon
+} from '@heroicons/react/24/outline';
+
+const CATEGORY_ICONS = {
+  'vehicles': TruckIcon,
+  'property': HomeIcon,
+  'electronics': ComputerDesktopIcon,
+  'furniture': ShoppingBagIcon,
+  'jobs': BriefcaseIcon,
+  'services': WrenchIcon,
+  'fashion': ShirtIcon,
+  'others': ArchiveBoxIcon
+};
 
 const mockFeatured = [
   {
@@ -157,14 +178,16 @@ const Home: React.FC = () => {
       {/* Categories Section */}
       <section className="container mx-auto px-4 mt-12 mb-12">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-          {CATEGORIES.map((category) => (
+          {Object.entries(CATEGORY_ICONS).map(([id, Icon]) => (
             <Link
-              key={category.id}
-              to={`/category/${category.id.toLowerCase()}`}
-              className="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md hover-lift hover:bg-blue-50 hover:scale-105 transform transition-all duration-200"
+              key={id}
+              to={`/category/${id}`}
+              className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
             >
-              <span className="text-2xl mb-2 hover-float">{category.icon}</span>
-              <span className="text-sm text-center font-medium text-gray-700 text-gradient-hover">{category.name}</span>
+              <Icon className="w-8 h-8 text-blue-600 mb-2" />
+              <span className="text-sm text-center font-medium text-gray-700 text-gradient-hover capitalize">
+                {id}
+              </span>
             </Link>
           ))}
         </div>
@@ -189,11 +212,11 @@ const Home: React.FC = () => {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-2 text-gradient-hover">{listing.title}</h3>
-                  <p className="text-gray-600 mb-2">{listing.description}</p>
+                  <h3 className="text-lg font-semibold mb-2">{listing.title}</h3>
+                  <p className="text-gray-600 text-sm mb-2">{listing.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-blue-600 hover-pulse">
-                      ${listing.price}
+                    <span className="text-xl font-bold text-green-600">
+                      ${listing.price.toLocaleString()}
                     </span>
                     <span className="text-sm text-gray-500">{listing.location}</span>
                   </div>
@@ -232,11 +255,11 @@ const Home: React.FC = () => {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-2 text-gradient-hover">{deal.title}</h3>
-                  <p className="text-gray-600 mb-2">{deal.description}</p>
+                  <h3 className="text-lg font-semibold mb-2">{deal.title}</h3>
+                  <p className="text-gray-600 text-sm mb-2">{deal.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-green-600 hover-pulse">
-                      ${deal.price}
+                    <span className="text-xl font-bold text-green-600">
+                      ${deal.price.toLocaleString()}
                     </span>
                     <span className="text-sm text-gray-500">{deal.location}</span>
                   </div>
