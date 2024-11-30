@@ -79,39 +79,55 @@ const hotDeals = [
 const HotDeals = () => {
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Hero Banner Ad Placement */}
-      <div className="w-full bg-gray-700 border-2 border-dashed border-gray-600 rounded-lg p-12 mb-8 text-center">
-        <h2 className="text-2xl text-white font-semibold">Advertise Here</h2>
+      {/* Top Advertisement Banner */}
+      <div className="w-full bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 text-center">
+        <h2 className="text-2xl text-gray-600 font-semibold">Advertise Here</h2>
       </div>
-      <h1 className="text-3xl font-bold mb-8 text-orange-600">Hot Deals</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {hotDeals.map((deal) => (
-          <Link
-            key={deal.id}
-            to={`/listing/${deal.id}`}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-            onClick={() => incrementViews(deal.id)}
-          >
-            <div className="relative h-40">
-              <img
-                src={deal.images[0]}
-                alt={deal.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="text-lg font-semibold mb-2 text-orange-600">{deal.title}</h3>
-              <p className="text-gray-600 text-sm mb-2">{deal.description}</p>
-              <div className="flex justify-between items-center">
-                <span className="text-orange-600 font-bold">${deal.price.toLocaleString()}</span>
-                <span className="text-gray-500 text-sm">{deal.views} views</span>
-              </div>
-              <div className="mt-2">
-                <span className="text-gray-500 text-sm">{deal.location}</span>
-              </div>
-            </div>
-          </Link>
-        ))}
+
+      <div className="flex gap-8">
+        {/* Left Column - Square Ads */}
+        <div className="hidden md:flex flex-col gap-4 w-64">
+          <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center aspect-square">
+            <h3 className="text-lg text-gray-600 font-semibold">Square Ad</h3>
+          </div>
+          <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center aspect-square">
+            <h3 className="text-lg text-gray-600 font-semibold">Square Ad</h3>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold mb-8 text-orange-600">Hot Deals</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {hotDeals.map((deal) => (
+              <Link
+                key={deal.id}
+                to={`/listing/${deal.id}`}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                onClick={() => incrementViews(deal.id)}
+              >
+                <div className="relative h-40">
+                  <img
+                    src={deal.images[0]}
+                    alt={deal.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold mb-2 text-orange-600">{deal.title}</h3>
+                  <p className="text-gray-600 text-sm mb-2">{deal.description}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-orange-600 font-bold">${deal.price.toLocaleString()}</span>
+                    <span className="text-gray-500 text-sm">{deal.views} views</span>
+                  </div>
+                  <div className="mt-2">
+                    <span className="text-gray-500 text-sm">{deal.location}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
