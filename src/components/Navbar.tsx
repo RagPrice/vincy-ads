@@ -64,15 +64,9 @@ const Navbar: React.FC = () => {
             <div className="flex items-center space-x-4">
               <Link
                 to="/login"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-200"
               >
                 Sign in
-              </Link>
-              <Link
-                to="/signup"
-                className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium"
-              >
-                Sign up
               </Link>
               <Link
                 to="/post-ad"
