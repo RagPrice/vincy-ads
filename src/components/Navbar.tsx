@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
               </Link>
               <Link
                 to="/login"
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:border-gray-400 hover:bg-gray-50 transition duration-200"
+                className="px-4 py-2 border border-white text-white rounded hover:border-gray-200 hover:bg-white hover:text-gray-700 transition duration-200"
               >
                 Sign in
               </Link>
