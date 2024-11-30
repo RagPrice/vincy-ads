@@ -198,10 +198,10 @@ const Home: React.FC = () => {
 
       {/* Featured Listings Section */}
       <section className="container mx-auto px-4 mt-12 mb-12">
-        <h2 className="text-3xl font-bold text-purple-600 mb-6 text-gradient-hover">Featured Items</h2>
+        <h2 className="text-3xl font-bold text-purple-600 mb-6 hover:text-purple-400 transition-colors duration-300">Featured Items</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedFeaturedListings.map((listing) => (
-            <div key={listing.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
+            <div key={listing.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:bg-purple-50">
               <Link 
                 to={`/listing/${listing.id}`} 
                 className="block"
@@ -215,10 +215,10 @@ const Home: React.FC = () => {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2">{listing.title}</h3>
+                  <h3 className="text-lg font-semibold mb-2 text-purple-600">{listing.title}</h3>
                   <p className="text-gray-600 text-sm mb-2">{listing.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-green-600">
+                    <span className="text-xl font-bold text-purple-600">
                       ${listing.price.toLocaleString()}
                     </span>
                     <span className="text-sm text-gray-500">{listing.location}</span>
@@ -241,10 +241,10 @@ const Home: React.FC = () => {
 
       {/* Hot Deals Section */}
       <section className="container mx-auto px-4 mt-12 mb-12">
-        <h2 className="text-3xl font-bold text-green-600 mb-6 text-gradient-hover">Hot Deals</h2>
+        <h2 className="text-3xl font-bold text-orange-600 mb-6 hover:text-orange-400 transition-colors duration-300">Hot Deals</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedDealsListings.map((deal) => (
-            <div key={deal.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
+            <div key={deal.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:bg-orange-50">
               <Link 
                 to={`/listing/${deal.id}`} 
                 className="block"
@@ -258,10 +258,10 @@ const Home: React.FC = () => {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2">{deal.title}</h3>
+                  <h3 className="text-lg font-semibold mb-2 text-orange-600">{deal.title}</h3>
                   <p className="text-gray-600 text-sm mb-2">{deal.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-green-600">
+                    <span className="text-xl font-bold text-orange-600">
                       ${deal.price.toLocaleString()}
                     </span>
                     <span className="text-sm text-gray-500">{deal.location}</span>
