@@ -20,26 +20,28 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-blue-600 text-white shadow-lg">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-8">
-            <Link to="/" className="text-2xl font-bold">
-              Vincy Ads
+        <div className="flex items-center h-16">
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-bold mr-8">
+            Vincy Ads
+          </Link>
+
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center space-x-6 mr-8">
+            <Link to="/" className={`${isActive('/')} transition duration-200`}>
+              Home
             </Link>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link to="/" className={`${isActive('/')} transition duration-200`}>
-                Home
-              </Link>
-              <Link to="/about" className={`${isActive('/about')} transition duration-200`}>
-                About
-              </Link>
-              <Link to="/contact" className={`${isActive('/contact')} transition duration-200`}>
-                Contact
-              </Link>
-            </div>
+            <Link to="/about" className={`${isActive('/about')} transition duration-200`}>
+              About
+            </Link>
+            <Link to="/contact" className={`${isActive('/contact')} transition duration-200`}>
+              Contact
+            </Link>
           </div>
 
-          <div className="flex-1 max-w-2xl mx-4">
-            <form onSubmit={handleSearch} className="flex">
+          {/* Search Bar */}
+          <div className="flex-1">
+            <form onSubmit={handleSearch} className="flex max-w-xl">
               <input
                 type="text"
                 value={searchQuery}
@@ -56,7 +58,8 @@ const Navbar: React.FC = () => {
             </form>
           </div>
 
-          <div className="flex items-center space-x-4">
+          {/* Action Buttons */}
+          <div className="flex items-center space-x-4 ml-8">
             <Link
               to="/post-ad"
               className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-200"
