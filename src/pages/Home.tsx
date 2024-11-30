@@ -193,7 +193,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-20">
+        <section className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-20 mb-12">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-2">
               Find What You Need
@@ -220,7 +220,7 @@ const Home: React.FC = () => {
           {/* Main Content */}
           <div className="flex-1">
             {/* Featured Listings Section */}
-            <section className="container mx-auto px-4 mt-12">
+            <section>
               <Link to="/featured" className="inline-block">
                 <h2 className="text-2xl font-bold mb-6 text-purple-600 hover:text-purple-500 transition-colors duration-300">
                   Featured Items
