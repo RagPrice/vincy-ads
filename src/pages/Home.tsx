@@ -165,8 +165,10 @@ const Home: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div>
         {/* Top Advertisement Banner */}
-        <div className="w-full bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 text-center">
-          <h2 className="text-2xl text-gray-600 font-semibold">Advertise Here</h2>
+        <div className="container mx-auto px-4 py-8">
+          <div className="w-full bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 text-center">
+            <h2 className="text-2xl text-gray-600 font-semibold">Advertise Here</h2>
+          </div>
         </div>
 
         {/* Hero Section */}
