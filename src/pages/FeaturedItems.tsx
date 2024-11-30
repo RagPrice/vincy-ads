@@ -1,5 +1,7 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { incrementViews } from '../utils/storage';
+import BackButton from '../components/BackButton';
 
 const featuredListings = [
   {
@@ -60,7 +62,12 @@ const featuredListings = [
 
 const FeaturedItems = () => {
   return (
-    <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Back Button */}
+      <div className="container mx-auto px-4 pt-4">
+        <BackButton />
+      </div>
+
       {/* Top Advertisement Banner */}
       <div className="w-full bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 text-center">
         <h2 className="text-2xl text-gray-600 font-semibold">Advertise Here</h2>

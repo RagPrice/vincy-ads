@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Listing } from '../types';
 import { incrementViews } from '../utils/storage';
+import BackButton from '../components/BackButton';
 
 // Mock vehicle listings data
 const mockVehicles: Listing[] = [
@@ -59,6 +60,11 @@ const Vehicles: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Back Button */}
+      <div className="container mx-auto px-4 pt-4">
+        <BackButton />
+      </div>
+
       {/* Top Advertisement Banner */}
       <div className="container mx-auto px-4 py-8">
         <div className="w-full bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 text-center">
