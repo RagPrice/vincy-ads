@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { incrementViews } from '../utils/storage';
-import { Listing, CATEGORIES } from '../types';
+import { Listing } from '../types';
 import { getFeaturedListings, getHotDeals } from '../utils/storage';
 import {
   TruckIcon,
@@ -10,7 +10,7 @@ import {
   ShoppingBagIcon,
   BriefcaseIcon,
   WrenchIcon,
-  ShirtIcon,
+  TagIcon,
   ArchiveBoxIcon
 } from '@heroicons/react/24/outline';
 
@@ -21,7 +21,7 @@ const CATEGORY_ICONS = {
   'furniture': ShoppingBagIcon,
   'jobs': BriefcaseIcon,
   'services': WrenchIcon,
-  'fashion': ShirtIcon,
+  'fashion': TagIcon,
   'others': ArchiveBoxIcon
 };
 
