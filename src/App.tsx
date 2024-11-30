@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import About from './pages/About';
+import Contact from './pages/Contact';
 import PostAd from './pages/PostAd';
 import ListingDetail from './pages/ListingDetail';
 import SearchResults from './pages/SearchResults';
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/post-ad" element={<PostAd />} />
             <Route path="/listing/:id" element={<ListingDetail />} />
             <Route path="/search" element={<SearchResults />} />
