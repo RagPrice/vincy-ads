@@ -12,6 +12,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import FeaturedItems from './pages/FeaturedItems';
 import HotDeals from './pages/HotDeals';
+import Vehicles from './pages/Vehicles';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/post-ad" element={<PostAd />} />
             <Route path="/listing/:id" element={<ListingDetail />} />
             <Route path="/search" element={<SearchResults />} />
+            <Route path="/category/vehicles" element={<Vehicles />} />
           </Routes>
         </main>
         <Footer />
