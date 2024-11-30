@@ -197,87 +197,73 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Listings Section */}
-      <section className="container mx-auto px-4 mt-12 mb-12">
-        <h2 className="text-3xl font-bold text-purple-600 mb-6 hover:text-purple-400 transition-colors duration-300">Featured Items</h2>
+      <section className="container mx-auto px-4 mt-12">
+        <Link to="/featured" className="inline-block">
+          <h2 className="text-2xl font-bold mb-6 text-purple-600 hover:text-purple-500 transition-colors duration-300">
+            Featured Items
+            <span className="ml-2 text-sm">&rarr;</span>
+          </h2>
+        </Link>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedFeaturedListings.map((listing) => (
-            <div key={listing.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:bg-purple-50">
-              <Link 
-                to={`/listing/${listing.id}`} 
-                className="block"
-                onClick={() => handleListingClick(listing.id, false)}
-              >
-                <div className="image-zoom h-48">
-                  <img
-                    src={listing.images[0]}
-                    alt={listing.title}
-                    className="w-full h-full object-cover"
-                  />
+            <Link
+              key={listing.id}
+              to={`/listing/${listing.id}`}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+              onClick={() => handleListingClick(listing.id, false)}
+            >
+              <div className="relative h-48">
+                <img
+                  src={listing.images[0]}
+                  alt={listing.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="text-xl font-semibold mb-2 text-purple-600">{listing.title}</h3>
+                <p className="text-gray-600 mb-2">{listing.description}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-purple-600 font-bold">${listing.price.toLocaleString()}</span>
+                  <span className="text-gray-500 text-sm">{listing.views} views</span>
                 </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2 text-purple-600">{listing.title}</h3>
-                  <p className="text-gray-600 text-sm mb-2">{listing.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-purple-600">
-                      ${listing.price.toLocaleString()}
-                    </span>
-                    <span className="text-sm text-gray-500">{listing.location}</span>
-                  </div>
-                  <div className="mt-2 flex justify-between items-center">
-                    <span className="text-sm text-gray-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                      </svg>
-                      {listing.views} views
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </div>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
 
       {/* Hot Deals Section */}
       <section className="container mx-auto px-4 mt-12 mb-12">
-        <h2 className="text-3xl font-bold text-orange-600 mb-6 hover:text-orange-400 transition-colors duration-300">Hot Deals</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Link to="/hot-deals" className="inline-block">
+          <h2 className="text-2xl font-bold mb-6 text-orange-600 hover:text-orange-500 transition-colors duration-300">
+            Hot Deals
+            <span className="ml-2 text-sm">&rarr;</span>
+          </h2>
+        </Link>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {displayedDealsListings.map((deal) => (
-            <div key={deal.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:bg-orange-50">
-              <Link 
-                to={`/listing/${deal.id}`} 
-                className="block"
-                onClick={() => handleListingClick(deal.id, true)}
-              >
-                <div className="image-zoom h-48">
-                  <img
-                    src={deal.images[0]}
-                    alt={deal.title}
-                    className="w-full h-full object-cover"
-                  />
+            <Link
+              key={deal.id}
+              to={`/listing/${deal.id}`}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+              onClick={() => handleListingClick(deal.id, true)}
+            >
+              <div className="relative h-40">
+                <img
+                  src={deal.images[0]}
+                  alt={deal.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold mb-2 text-orange-600">{deal.title}</h3>
+                <p className="text-gray-600 text-sm mb-2">{deal.description}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-orange-600 font-bold">${deal.price.toLocaleString()}</span>
+                  <span className="text-gray-500 text-sm">{deal.views} views</span>
                 </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2 text-orange-600">{deal.title}</h3>
-                  <p className="text-gray-600 text-sm mb-2">{deal.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-orange-600">
-                      ${deal.price.toLocaleString()}
-                    </span>
-                    <span className="text-sm text-gray-500">{deal.location}</span>
-                  </div>
-                  <div className="mt-2 flex justify-between items-center">
-                    <span className="text-sm text-gray-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                      </svg>
-                      {deal.views} views
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </div>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
