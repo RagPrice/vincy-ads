@@ -45,13 +45,15 @@ export interface User {
   email: string;
   password: string;
   name: string;
+  provider?: 'email' | 'google' | 'facebook' | 'apple';
   createdAt: string;
 }
 
 export interface SignupFormData {
+  name: string;
   email: string;
   password: string;
-  name: string;
+  provider?: 'email' | 'google' | 'facebook' | 'apple';
 }
 
 export const CATEGORIES: Category[] = [

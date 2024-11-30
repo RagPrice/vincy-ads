@@ -1,29 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SignupFormData } from '../types';
-import { createUser } from '../utils/userStorage';
-import { Link } from 'react-router-dom';
+import { signupWithEmail, signupWithGoogle, signupWithFacebook, signupWithApple } from '../services/authService';
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<SignupFormData>({
+    name: '',
     email: '',
-    password: '',
-    name: ''
+    password: ''
   });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    const user = createUser(formData);
-    if (user) {
-      navigate('/');
-    } else {
-      setError('Email already exists');
-    }
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -32,16 +20,60 @@ const Signup: React.FC = () => {
     }));
   };
 
-  const handleSocialLogin = (provider: string) => {
-    // Handle social login based on provider
-    console.log(`Logging in with ${provider}`);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const result = await signupWithEmail(formData);
+      if (result.success) {
+        navigate('/');
+      } else {
+        setError(result.error || 'Signup failed');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSocialLogin = async (provider: 'google' | 'facebook' | 'apple') => {
+    setError('');
+    setLoading(true);
+
+    try {
+      let result;
+      switch (provider) {
+        case 'google':
+          result = await signupWithGoogle();
+          break;
+        case 'facebook':
+          result = await signupWithFacebook();
+          break;
+        case 'apple':
+          result = await signupWithApple();
+          break;
+      }
+
+      if (result?.success) {
+        navigate('/');
+      } else {
+        setError(result?.error || `${provider} signup failed`);
+      }
+    } catch (err) {
+      setError(`Failed to sign up with ${provider}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign Up
+          Create your account
         </h2>
       </div>
 
@@ -51,7 +83,8 @@ const Signup: React.FC = () => {
           <div className="space-y-4">
             <button
               onClick={() => handleSocialLogin('google')}
-              className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              disabled={loading}
+              className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <img
                 className="h-5 w-5 mr-2"
@@ -63,7 +96,8 @@ const Signup: React.FC = () => {
 
             <button
               onClick={() => handleSocialLogin('facebook')}
-              className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-[#1877F2] hover:bg-[#1874E8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1877F2]"
+              disabled={loading}
+              className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-[#1877F2] hover:bg-[#1874E8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1877F2] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <img
                 className="h-5 w-5 mr-2"
@@ -75,7 +109,8 @@ const Signup: React.FC = () => {
 
             <button
               onClick={() => handleSocialLogin('apple')}
-              className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+              disabled={loading}
+              className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <img
                 className="h-5 w-5 mr-2"
@@ -97,8 +132,14 @@ const Signup: React.FC = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+          {error && (
+            <div className="mt-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+            <div>
               <label className="block text-gray-700 mb-2" htmlFor="name">
                 Name
               </label>
@@ -108,12 +149,13 @@ const Signup: React.FC = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                disabled={loading}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
             </div>
 
-            <div className="mb-4">
+            <div>
               <label className="block text-gray-700 mb-2" htmlFor="email">
                 Email
               </label>
@@ -123,12 +165,13 @@ const Signup: React.FC = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                disabled={loading}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
             </div>
 
-            <div className="mb-6">
+            <div>
               <label className="block text-gray-700 mb-2" htmlFor="password">
                 Password
               </label>
@@ -138,23 +181,19 @@ const Signup: React.FC = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
+                disabled={loading}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
                 minLength={6}
               />
             </div>
 
-            {error && (
-              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-                {error}
-              </div>
-            )}
-
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign Up
+              {loading ? 'Signing up...' : 'Sign Up'}
             </button>
           </form>
 
