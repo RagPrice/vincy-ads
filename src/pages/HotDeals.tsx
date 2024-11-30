@@ -79,15 +79,10 @@ const hotDeals = [
 const HotDeals = () => {
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Top Advertisement Banner */}
-      <div className="w-full bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 text-center">
-        <h2 className="text-2xl text-gray-600 font-semibold">Advertise Here</h2>
-      </div>
-
       <div className="flex gap-8">
         {/* Left Column - Square Ads */}
-        <div className="hidden md:flex flex-col gap-4 w-64">
-          <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center aspect-square">
+        <div className="hidden md:flex flex-col gap-8 w-64 flex-shrink-0">
+          <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center aspect-square sticky top-4">
             <h3 className="text-lg text-gray-600 font-semibold">Advertise Here</h3>
           </div>
           <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center aspect-square">
