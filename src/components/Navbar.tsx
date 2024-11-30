@@ -47,6 +47,7 @@ const Navbar: React.FC = () => {
 
           {/* Navigation Links and Action Buttons */}
           <div className="flex items-center space-x-4 ml-8">
+            {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-6">
               <Link to="/" className={`${isActive('/')} transition duration-200`}>
                 Home
@@ -58,6 +59,8 @@ const Navbar: React.FC = () => {
                 Contact
               </Link>
             </div>
+
+            {/* Action Buttons */}
             <Link
               to="/post-ad"
               className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-200"
