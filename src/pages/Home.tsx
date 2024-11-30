@@ -4,18 +4,18 @@ import { incrementViews } from '../utils/storage';
 import { Listing, CATEGORIES } from '../types';
 import { getFeaturedListings, getHotDeals } from '../utils/storage';
 import {
-  TruckIcon,
   HomeIcon,
   ComputerDesktopIcon,
   ShoppingBagIcon,
   BriefcaseIcon,
   WrenchIcon,
   TagIcon,
-  ArchiveBoxIcon
+  ArchiveBoxIcon,
 } from '@heroicons/react/24/outline';
+import CarIcon from '../components/icons/CarIcon';
 
 const CATEGORY_ICONS = {
-  'vehicles': TruckIcon,
+  'vehicles': CarIcon,
   'property': HomeIcon,
   'electronics': ComputerDesktopIcon,
   'furniture': ShoppingBagIcon,
