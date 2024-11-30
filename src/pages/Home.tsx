@@ -171,6 +171,27 @@ const Home: React.FC = () => {
           </div>
         </div>
 
+        {/* Categories Section */}
+        <section className="container mx-auto px-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+            {CATEGORIES.map((category) => {
+              const Icon = CATEGORY_ICONS[category.id as keyof typeof CATEGORY_ICONS];
+              return (
+                <Link
+                  key={category.id}
+                  to={`/category/${category.id}`}
+                  className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                >
+                  <Icon className="w-8 h-8 text-blue-600 mb-2" />
+                  <span className="text-sm text-center font-medium text-gray-700 capitalize">
+                    {category.name}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-20">
           <div className="container mx-auto px-4 text-center">
@@ -198,27 +219,6 @@ const Home: React.FC = () => {
 
           {/* Main Content */}
           <div className="flex-1">
-            {/* Categories Section */}
-            <section className="container mx-auto px-4 mt-12 mb-12">
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                {CATEGORIES.map((category) => {
-                  const Icon = CATEGORY_ICONS[category.id as keyof typeof CATEGORY_ICONS];
-                  return (
-                    <Link
-                      key={category.id}
-                      to={`/category/${category.id}`}
-                      className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-                    >
-                      <Icon className="w-8 h-8 text-blue-600 mb-2" />
-                      <span className="text-sm text-center font-medium text-gray-700 capitalize">
-                        {category.name}
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-
             {/* Featured Listings Section */}
             <section className="container mx-auto px-4 mt-12">
               <Link to="/featured" className="inline-block">
