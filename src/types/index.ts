@@ -38,7 +38,6 @@ export interface ListingValidation {
 export interface Category {
   id: string;
   name: string;
-  icon: string;
 }
 
 export interface User {
@@ -56,14 +55,14 @@ export interface SignupFormData {
 }
 
 export const CATEGORIES: Category[] = [
-  { id: 'vehicles', name: 'Vehicles', icon: '🚗' },
-  { id: 'property', name: 'Property', icon: '🏠' },
-  { id: 'electronics', name: 'Electronics', icon: '💻' },
-  { id: 'furniture', name: 'Furniture', icon: '🪑' },
-  { id: 'jobs', name: 'Jobs', icon: '💼' },
-  { id: 'services', name: 'Services', icon: '🔧' },
-  { id: 'fashion', name: 'Fashion', icon: '👕' },
-  { id: 'others', name: 'Others', icon: '📦' }
+  { id: 'vehicles', name: 'Vehicles' },
+  { id: 'property', name: 'Property' },
+  { id: 'electronics', name: 'Electronics' },
+  { id: 'furniture', name: 'Furniture' },
+  { id: 'jobs', name: 'Jobs' },
+  { id: 'services', name: 'Services' },
+  { id: 'fashion', name: 'Fashion' },
+  { id: 'others', name: 'Others' }
 ];
 
 export const MAX_DESCRIPTION_LENGTH = 1000; 
