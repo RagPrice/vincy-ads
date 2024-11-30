@@ -1,0 +1,246 @@
+/* Hover Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -100% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* New underline animation */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::before,
+.link-underline::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  transition: width 0.3s ease-in-out;
+}
+
+.link-underline::before {
+  left: 50%;
+  background: linear-gradient(to right, transparent, #fff);
+}
+
+.link-underline::after {
+  right: 50%;
+  background: linear-gradient(to left, transparent, #fff);
+}
+
+.link-underline:hover::before,
+.link-underline:hover::after {
+  width: 50%;
+}
+
+/* Dark version for non-navbar links */
+.link-underline-dark::before {
+  background: linear-gradient(to right, transparent, #3b82f6);
+}
+
+.link-underline-dark::after {
+  background: linear-gradient(to left, transparent, #3b82f6);
+}
+
+/* Utility Classes */
+.hover-float {
+  transition: transform 0.3s ease;
+}
+
+.hover-float:hover {
+  animation: float 2s ease-in-out infinite;
+}
+
+.hover-pulse {
+  transition: all 0.3s ease;
+}
+
+.hover-pulse:hover {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.hover-shine {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 25%,
+    rgba(255, 255, 255, 0.2) 45%,
+    rgba(255, 255, 255, 0.2) 55%,
+    transparent 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-position: -100% 50%;
+}
+
+.hover-shine:hover {
+  animation: shine 1.5s ease-in-out infinite;
+}
+
+.hover-scale {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Button animations */
+.button-glow {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.button-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+.button-glow:hover::after {
+  animation: shine 1.5s ease-in-out infinite;
+}
+
+/* Card animations */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Image hover effects */
+.image-zoom {
+  overflow: hidden;
+}
+
+.image-zoom img {
+  transition: transform 0.5s ease;
+}
+
+.image-zoom:hover img {
+  transform: scale(1.1);
+}
+
+/* Text hover effects */
+.text-gradient-hover {
+  background-image: linear-gradient(
+    120deg,
+    #3b82f6 0%,
+    #60a5fa 50%,
+    #3b82f6 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.3s ease;
+}
+
+.text-gradient-hover:hover {
+  background-position: right center;
+}
+
+/* Listing Card Hover Effects */
+.listing-card {
+  transform: translateZ(0);
+  transition: all 0.3s ease-in-out;
+}
+
+.listing-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+
+.listing-card:active {
+  transform: scale(0.98);
+}
+
+/* Interactive Element Hover */
+.interactive {
+  transition: all 0.2s ease-in-out;
+}
+
+.interactive:hover {
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.interactive:active {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+/* Category Card Hover */
+.category-card {
+  transition: all 0.3s ease-in-out;
+}
+
+.category-card:hover {
+  background: #f7fafc;
+  transform: translateY(-4px);
+}
+
+.category-card:hover {
+  background: #1a202c;
+  transform: translateY(-4px);
+}
