@@ -1,15 +1,23 @@
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Listing } from '../types/auth';
+import { Listing } from '../types';
 import ListingCard from '../components/ListingCard';
 import FilterSidebar from '../components/FilterSidebar';
 import { useState } from 'react';
 
+interface SearchFilters {
+  minPrice: string;
+  maxPrice: string;
+  condition: string;
+  location: string;
+}
+
 // Mock function to fetch search results - replace with actual API call
 const searchListings = async (
-  query: string,
-  filters: Record<string, string>
+  searchQuery: string,
+  searchFilters: SearchFilters
 ): Promise<Listing[]> => {
+  console.log('Searching with query:', searchQuery, 'and filters:', searchFilters);
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
@@ -19,19 +27,12 @@ const searchListings = async (
           description: 'This is a sample search result',
           price: 100,
           category: 'electronics',
-          subcategory: 'phones',
-          condition: 'new',
           images: ['/placeholder.jpg'],
-          location: {
-            address: 'Kingstown, St. Vincent',
-          },
-          userId: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          status: 'active',
-          featured: false,
+          location: 'Kingstown',
           views: 0,
-          favorites: 0,
+          contactInfo: 'contact@email.com',
+          isOnSale: false,
+          isFeatured: false
         },
       ]);
     }, 1000);
@@ -40,18 +41,18 @@ const searchListings = async (
 
 export default function SearchResults() {
   const [searchParams] = useSearchParams();
-  const query = searchParams.get('q') || '';
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<SearchFilters>({
     minPrice: '',
     maxPrice: '',
     condition: '',
-    location: '',
+    location: ''
   });
+  const query = searchParams.get('q') || '';
 
   const { data: listings, isLoading } = useQuery({
-    queryKey: ['search', query, filters],
+    queryKey: ['searchResults', query, filters],
     queryFn: () => searchListings(query, filters),
-    enabled: !!query,
+    enabled: !!query
   });
 
   if (!query) {

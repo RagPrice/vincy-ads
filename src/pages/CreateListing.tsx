@@ -14,23 +14,42 @@ const createListingSchema = z.object({
   subcategory: z.string().min(1, 'Please select a subcategory'),
   condition: z.enum(['new', 'like-new', 'good', 'fair', 'poor']),
   location: z.string().min(1, 'Location is required'),
+  contactInfo: z.string(),
+  isFeatured: z.boolean(),
+  isOnSale: z.boolean(),
 });
 
 type CreateListingForm = z.infer<typeof createListingSchema>;
+
+interface ValidationErrors {
+  images?: string;
+}
 
 export default function CreateListing() {
   const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
   const [images, setImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [validation, setValidation] = useState<ValidationErrors>({});
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     watch,
   } = useForm<CreateListingForm>({
     resolver: zodResolver(createListingSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      price: 0,
+      category: '',
+      subcategory: '',
+      condition: 'new',
+      location: '',
+      contactInfo: '',
+      isFeatured: false,
+      isOnSale: false,
+    },
   });
 
   const selectedCategory = watch('category');
@@ -40,28 +59,42 @@ export default function CreateListing() {
     setImages((prev) => [...prev, ...files].slice(0, 10)); // Max 10 images
   };
 
-  const removeImage = (index: number) => {
+  const handleImageDelete = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const onSubmit = async (data: CreateListingForm) => {
-    if (!isAuthenticated) {
-      login();
-      return;
-    }
+  const validateForm = (formData: CreateListingForm): ValidationErrors => {
+    const errors: ValidationErrors = {};
 
     if (images.length === 0) {
-      toast.error('Please add at least one image');
-      return;
+      errors.images = 'Please add at least one image';
     }
+    return errors;
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setUploading(true);
+    setValidation({});
 
     try {
-      setUploading(true);
-      // TODO: Implement image upload and listing creation
+      // Validate form data
+      const currentFormData = watch();
+      const errors = validateForm(currentFormData);
+      if (Object.keys(errors).length > 0) {
+        setValidation(errors);
+        return;
+      }
+
+      // TODO: Submit form data to backend
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Show success message
       toast.success('Listing created successfully!');
       navigate('/profile');
     } catch (error) {
-      toast.error('Failed to create listing');
+      console.error('Error creating listing:', error);
+      toast.error('Failed to create listing. Please try again.');
     } finally {
       setUploading(false);
     }
@@ -85,7 +118,7 @@ export default function CreateListing() {
     <div className="max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Create a New Listing</h1>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={onSubmit} className="space-y-6">
         {/* Title */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -244,6 +277,9 @@ export default function CreateListing() {
             onChange={handleImageChange}
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {validation.images && (
+            <p className="mt-1 text-sm text-red-600">{validation.images}</p>
+          )}
           <div className="mt-2 grid grid-cols-5 gap-2">
             {images.map((image, index) => (
               <div key={index} className="relative">
@@ -254,7 +290,7 @@ export default function CreateListing() {
                 />
                 <button
                   type="button"
-                  onClick={() => removeImage(index)}
+                  onClick={() => handleImageDelete(index)}
                   className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
                 >
                   ×

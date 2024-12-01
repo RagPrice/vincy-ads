@@ -94,7 +94,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async () => {
     try {
       await loginWithRedirect({
-        screen_hint: 'signup',
+        appState: {
+          returnTo: window.location.pathname
+        }
       });
     } catch (error) {
       setState(prev => ({

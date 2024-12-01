@@ -1,478 +1,467 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { incrementViews } from '../utils/storage';
-import { Listing } from '../types';
 import {
   Car,
   Home as HomeIcon,
   Laptop,
   Sofa,
   Briefcase,
-  ShoppingBag,
-  ChevronDown,
-  Smartphone,
   Wrench,
   Gift,
-  PaintBucket,
   Shirt,
-  UtensilsCrossed,
-  GraduationCap,
   Dumbbell,
-  Music,
-  PawPrint,
   Baby,
-  Gamepad2,
-  Flower2,
-  BookOpen,
   Calendar,
   Package,
-  ChevronRight,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
-interface SubCategory {
-  name: string;
-  subcategories?: string[];
-}
-
-interface Category {
-  name: string;
-  path: string;
-  subcategories: (string | SubCategory)[];
-}
-
-const categories: Category[] = [
+const categories = [
   {
     name: 'Vehicles',
+    icon: <Car />,
     path: '/category/vehicles',
-    subcategories: [
-      'For Sale',
-      'For Rent'
-    ]
+    subcategories: ['For Sale', 'For Rent']
   },
   {
     name: 'Real Estate',
+    icon: <HomeIcon />,
     path: '/category/real-estate',
-    subcategories: [
-      'Houses for Sale',
-      'Apartments for Rent',
-      'Commercial Properties',
-      'Land',
-      'Roommates'
-    ]
+    subcategories: ['Houses for Sale', 'Apartments for Rent', 'Commercial Properties', 'Land', 'Roommates']
   },
   {
     name: 'Electronics',
+    icon: <Laptop />,
     path: '/category/electronics',
-    subcategories: [
-      'Computers',
-      'Smartphones',
-      'Tablets',
-      'Audio Equipment',
-      'Gaming Consoles',
-      'Accessories'
-    ]
+    subcategories: ['Computers', 'Smartphones', 'Tablets', 'Audio Equipment', 'Gaming Consoles', 'Accessories']
   },
   {
-    name: 'Fashion & Accessories',
-    path: '/category/fashion',
-    subcategories: [
-      'Clothing',
-      'Shoes',
-      'Watches',
-      'Jewelry',
-      'Bags',
-      'Vintage & Collectibles'
-    ]
+    name: 'Furniture',
+    icon: <Sofa />,
+    path: '/category/furniture',
+    subcategories: ['Living Room', 'Bedroom', 'Kitchen', 'Office Furniture', 'Home Decor', 'Appliances']
   },
   {
     name: 'Jobs',
+    icon: <Briefcase />,
     path: '/category/jobs',
-    subcategories: [
-      'Full-Time',
-      'Part-Time',
-      'Contract',
-      'Freelance',
-      'Internships',
-      'Industry-Specific Roles'
-    ]
+    subcategories: ['Full-Time', 'Part-Time', 'Contract', 'Freelance', 'Internships', 'Industry-Specific Roles']
+  },
+  {
+    name: 'Fashion',
+    icon: <Shirt />,
+    path: '/category/fashion',
+    subcategories: ['Clothing', 'Shoes', 'Watches', 'Jewelry', 'Bags', 'Vintage & Collectibles']
   },
   {
     name: 'Events',
+    icon: <Calendar />,
     path: '/category/events',
     subcategories: []
   },
   {
-    name: 'Furniture & Home',
-    path: '/category/furniture-home',
-    subcategories: [
-      'Living Room',
-      'Bedroom',
-      'Kitchen',
-      'Office Furniture',
-      'Home Decor',
-      'Appliances'
-    ]
-  },
-  {
     name: 'Services',
+    icon: <Wrench />,
     path: '/category/services',
-    subcategories: [
-      'Home Services',
-      'Professional Services',
-      'Tutoring',
-      'Event Services',
-      'Repair Services'
-    ]
+    subcategories: ['Home Services', 'Professional Services', 'Tutoring', 'Event Services', 'Repair Services']
   },
   {
-    name: 'Pets',
-    path: '/category/pets',
-    subcategories: [
-      'Pets for Sale',
-      'Pet Accessories',
-      'Pet Services',
-      'Adoption'
-    ]
+    name: 'Free',
+    icon: <Gift />,
+    path: '/category/free',
+    subcategories: []
   },
   {
-    name: 'Miscellaneous',
-    path: '/category/miscellaneous',
-    subcategories: [
-      'Free Items',
-      'Collectibles',
-      'Hobbies',
-      'Art & Crafts'
-    ]
+    name: 'Other',
+    icon: <Package />,
+    path: '/category/other',
+    subcategories: ['Free Items', 'Collectibles', 'Hobbies', 'Art & Crafts']
   }
 ];
 
-const CATEGORY_ICONS = {
-  'vehicles': Car,
-  'real-estate': HomeIcon,
-  'electronics': Laptop,
-  'furniture-home': Sofa,
-  'jobs': Briefcase,
-  'fashion': Shirt,
-  'events': Calendar,
-  'services': Wrench,
-  'pets': PawPrint,
-  'miscellaneous': Package,
-};
-
 const Home = () => {
-  const [featuredListings] = useState<Listing[]>([
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showCategories, setShowCategories] = useState(false);
+  const [featuredListings] = React.useState([
     {
       id: '1',
-      title: 'Luxury Beach House',
-      description: 'Beautiful 3-bedroom villa with ocean view',
-      price: 750000,
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Bequia',
-      category: 'Real Estate',
+      title: 'Toyota Corolla 2019',
+      description: 'Well maintained, single owner',
+      price: 45000,
+      images: ['/cars/toyota-corolla.jpg'],
+      location: 'Kingstown',
+      category: 'vehicles',
+      views: 120,
       contactInfo: 'contact@email.com',
-      featured: true,
-      views: 150
+      isOnSale: false,
+      isFeatured: true
     },
     {
       id: '2',
-      title: 'Modern Office Space',
+      title: 'Luxury Apartment',
       description: 'Prime location, fully furnished',
       price: 299000,
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      images: ['https://images.unsplash.com/photo-1497366216548-37526070297c'],
       location: 'Kingstown',
-      category: 'Real Estate',
+      category: 'real-estate',
       contactInfo: 'contact@email.com',
-      featured: true,
-      views: 120
+      views: 85,
+      isOnSale: true,
+      isFeatured: true
     },
     {
       id: '3',
       title: 'Beachfront Villa',
       description: 'Luxury 4-bedroom villa with private beach access',
       price: 850000,
-      image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811'],
       location: 'Bequia',
-      category: 'Real Estate',
+      category: 'real-estate',
       contactInfo: 'contact@email.com',
-      featured: true,
-      views: 100
+      views: 100,
+      isOnSale: false,
+      isFeatured: true
     }
   ]);
 
-  const [dealsListings] = useState<Listing[]>([
+  const [hotDeals] = React.useState([
     {
       id: '4',
-      title: 'iPhone 14 Pro',
-      description: '256GB, Midnight, Unlocked',
-      price: 899,
-      image: 'https://images.unsplash.com/photo-1678911820864-e5c67e784b10?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      title: 'iPhone 13 Pro',
+      description: 'Brand new, sealed in box',
+      price: 2500,
+      originalPrice: 3000,
+      images: ['https://images.unsplash.com/photo-1632661674596-618d8b34d669'],
       location: 'Kingstown',
-      category: 'Electronics',
-      contactInfo: 'contact@email.com',
-      discount: 20,
-      views: 200
+      category: 'electronics',
+      discount: '17% OFF'
     },
     {
       id: '5',
-      title: 'Designer Sofa Set',
-      description: '3-piece modern living room set',
-      price: 1299,
-      image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Calliaqua',
-      category: 'Furniture & Home',
-      contactInfo: 'contact@email.com',
-      discount: 30,
-      views: 150
+      title: 'Gaming Laptop',
+      description: 'RTX 3060, 16GB RAM',
+      price: 3500,
+      originalPrice: 4200,
+      images: ['https://images.unsplash.com/photo-1605134513573-005b85795920'],
+      location: 'Arnos Vale',
+      category: 'electronics',
+      discount: '16% OFF'
     },
     {
       id: '6',
-      title: 'Samsung 65" QLED TV',
-      description: '4K Smart TV with HDR',
-      price: 799,
-      image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Mesopotamia',
-      category: 'Electronics',
-      contactInfo: 'contact@email.com',
-      discount: 25,
-      views: 180
+      title: 'Dining Set',
+      description: 'Solid wood, 6 chairs',
+      price: 1200,
+      originalPrice: 1500,
+      images: ['https://images.unsplash.com/photo-1617104551722-3b2d51366400'],
+      location: 'Calliaqua',
+      category: 'furniture',
+      discount: '20% OFF'
     },
     {
       id: '7',
       title: 'Mountain Bike',
-      description: '29" Premium Mountain Bike',
-      price: 449,
-      image: 'https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Layou',
-      category: 'Sports',
-      contactInfo: 'contact@email.com',
-      discount: 15,
-      views: 120
+      description: 'Like new condition',
+      price: 800,
+      originalPrice: 1000,
+      images: ['https://images.unsplash.com/photo-1532298229144-0ec0c57515c7'],
+      location: 'Mesopotamia',
+      category: 'sports',
+      discount: '20% OFF'
     },
     {
       id: '8',
-      title: 'Gold Necklace',
-      description: '18K Gold Chain, 20 inches',
-      price: 599,
-      image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      title: 'Smart TV 55"',
+      description: '4K Ultra HD',
+      price: 1800,
+      originalPrice: 2200,
+      images: ['https://images.unsplash.com/photo-1593784991095-a205069470b6'],
       location: 'Kingstown',
-      category: 'Fashion & Accessories',
-      contactInfo: 'contact@email.com',
-      discount: 40,
-      views: 160
+      category: 'electronics',
+      discount: '18% OFF'
     },
     {
       id: '9',
-      title: 'Gaming Console',
-      description: 'Latest gen with 2 controllers',
-      price: 399,
-      image: 'https://images.unsplash.com/photo-1605901309584-818e25960a8f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      title: 'Office Chair',
+      description: 'Ergonomic design',
+      price: 400,
+      originalPrice: 500,
+      images: ['https://images.unsplash.com/photo-1505797149-35ebcb05a236'],
       location: 'Arnos Vale',
-      category: 'Electronics',
-      contactInfo: 'contact@email.com',
-      discount: 20,
-      views: 140
+      category: 'furniture',
+      discount: '20% OFF'
     },
     {
       id: '10',
-      title: 'Dining Set',
-      description: '6-seater wooden dining set',
-      price: 899,
-      image: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Bequia',
-      category: 'Furniture & Home',
-      contactInfo: 'contact@email.com',
-      discount: 35,
-      views: 130
+      title: 'Coffee Machine',
+      description: 'Professional grade',
+      price: 600,
+      originalPrice: 750,
+      images: ['https://images.unsplash.com/photo-1517142089942-7fde63acd811'],
+      location: 'Kingstown',
+      category: 'appliances',
+      discount: '20% OFF'
     },
     {
       id: '11',
-      title: 'Designer Watch',
-      description: 'Luxury automatic watch',
-      price: 1299,
-      image: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Kingstown',
-      category: 'Fashion & Accessories',
-      contactInfo: 'contact@email.com',
-      discount: 25,
-      views: 170
+      title: 'Wireless Headphones',
+      description: 'Noise cancelling',
+      price: 280,
+      originalPrice: 350,
+      images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e'],
+      location: 'Calliaqua',
+      category: 'electronics',
+      discount: '20% OFF'
     }
   ]);
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setSelectedCategory(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleCategoryClick = (categoryName: string) => {
-    setSelectedCategory(prev => prev === categoryName ? null : categoryName);
-  };
-
-  const handleListingClick = (id: string) => {
-    incrementViews(id);
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 200;
+      const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Advertisement Banner */}
-      <div className="container mx-auto p-4">
-        <div className="bg-gray-200 rounded-lg p-8 text-center h-48 flex items-center justify-center">
-          <span className="text-gray-600 text-2xl">Advertise Here</span>
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16 h-64 mb-8">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">Find What You Need</h1>
-          <p className="text-xl">Browse local listings or post your own advertisement</p>
+      <div className="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-12 mb-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl font-bold mb-4">
+              Welcome to Vincy Ads Marketplace
+            </h1>
+            <p className="text-xl mb-8">
+              Your one-stop destination for buying and selling in St. Vincent and
+              the Grenadines
+            </p>
+            <div className="flex justify-center gap-4">
+              <Link
+                to="/post-ad"
+                className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
+              >
+                Post an Ad
+              </Link>
+              <button
+                onClick={() => setShowCategories(!showCategories)}
+                className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+              >
+                Browse Categories
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Main Content with Side Banners */}
-      <div className="container mx-auto px-4 space-y-16">
-        {/* Categories Grid */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Categories</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {categories.map((category) => (
-              <div 
-                key={category.name} 
-                className="relative group"
-                ref={selectedCategory === category.name ? dropdownRef : null}
+      {/* Categories */}
+      {showCategories && (
+        <div className="container mx-auto px-4 mb-16">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-purple-600">Categories</h2>
+            <div className="flex gap-2">
+              <button
+                onClick={() => scroll('left')}
+                className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
               >
-                <div 
-                  onClick={() => handleCategoryClick(category.name)}
-                  className="w-full h-full flex flex-col items-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg hover:scale-105 hover:bg-gray-50 transition-all duration-300 cursor-pointer"
+                <svg
+                  className="w-6 h-6 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {CATEGORY_ICONS[category.path.slice(10)] && 
-                    React.createElement(
-                      CATEGORY_ICONS[category.path.slice(10)],
-                      { className: "w-10 h-10 text-blue-600 mb-3 group-hover:text-purple-600 transition-colors duration-300" }
-                    )
-                  }
-                  <span className="text-sm font-medium text-center text-gray-700 group-hover:text-purple-600 transition-colors duration-300">
-                    {category.name}
-                    {category.subcategories.length > 0 && 
-                      <ChevronDown className={`w-4 h-4 ml-1 inline-block transition-transform duration-300 ${selectedCategory === category.name ? 'rotate-180' : ''}`} />
-                    }
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => scroll('right')}
+                className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+              >
+                <svg
+                  className="w-6 h-6 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className="relative group">
+            <div 
+              ref={scrollContainerRef}
+              className="flex flex-nowrap overflow-x-auto gap-2 pb-4 no-scrollbar"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {categories.map((category) => (
+                <div key={category.name} className="flex-shrink-0 w-32">
+                  <div 
+                    className="relative hover:text-purple-600 transition-colors"
+                    onClick={() => setSelectedCategory(selectedCategory === category.name ? null : category.name)}
+                  >
+                    <div className="block bg-white p-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer text-center transform hover:-translate-y-1">
+                      <div className="text-3xl mb-2 flex justify-center items-center text-current">
+                        {category.icon}
+                      </div>
+                      <h3 className="text-sm font-semibold text-current">
+                        {category.name}
+                      </h3>
+                    </div>
+                    
+                    {/* Subcategories Dropdown */}
+                    {category.subcategories.length > 0 && selectedCategory === category.name && (
+                      <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg z-20 p-3 transform transition-all duration-300 opacity-100 translate-y-0">
+                        <ul className="space-y-1.5">
+                          {category.subcategories.map((sub) => (
+                            <li key={sub}>
+                              <Link 
+                                to={`${category.path}/${sub.toLowerCase().replace(/ /g, '-')}`}
+                                className="text-sm text-gray-600 hover:text-purple-600 block py-1.5 px-3 hover:bg-purple-50 rounded-md transition-all duration-200"
+                              >
+                                {sub}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            {/* Scroll Buttons */}
+            <button
+              onClick={() => scroll('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-purple-600 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity -ml-4 z-10"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => scroll('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-purple-600 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity -mr-4 z-10"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Featured Listings */}
+      <div className="container mx-auto px-4 mb-16">
+        <h2 className="text-2xl font-bold text-purple-600 mb-8">
+          Featured Listings
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {featuredListings.map((listing) => (
+            <Link
+              key={listing.id}
+              to={`/listing/${listing.id}`}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+            >
+              <img
+                src={listing.images[0]}
+                alt={listing.title}
+                className="w-full h-56 object-cover"
+              />
+              <div className="p-5">
+                <h3 className="text-lg font-medium text-gray-800 mb-2">
+                  {listing.title}
+                </h3>
+                <p className="text-gray-600 text-sm mb-3">
+                  {listing.description}
+                </p>
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-bold text-purple-600">
+                    ${listing.price.toLocaleString()}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {listing.location}
                   </span>
                 </div>
-                
-                {/* Primary Dropdown */}
-                {category.subcategories.length > 0 && selectedCategory === category.name && (
-                  <div 
-                    className="absolute z-50 w-48 left-0 top-full mt-2 transform transition-all duration-200 opacity-100"
-                    role="menu"
-                    aria-orientation="vertical"
-                  >
-                    <div className="bg-white rounded-lg shadow-lg py-2">
-                      {category.subcategories.map((subcat, index) => (
-                        <Link
-                          key={index}
-                          to={`${category.path}/${typeof subcat === 'string' ? subcat : subcat.name}`.toLowerCase().replace(/ /g, '-')}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
-                          role="menuitem"
-                          tabIndex={-1}
-                        >
-                          {typeof subcat === 'string' ? subcat : subcat.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Featured Section */}
-        <div className="mt-16">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-purple-600">Featured Items</h2>
-            <Link to="/featured" className="text-purple-600 hover:text-purple-700 font-medium">
-              View All
-              <ChevronRight className="w-5 h-5 inline-block ml-1" />
             </Link>
-          </div>
-          <div className="grid grid-cols-3 gap-6">
-            {featuredListings.slice(0, 3).map((item, index) => (
-              <Link
-                key={index}
-                to={`/item/${item.id}`}
-                onClick={() => handleListingClick(item.id)}
-                className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:scale-105"
-              >
-                <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-t-lg" />
-                <div className="p-4">
-                  <h3 className="text-lg font-medium text-purple-600 mb-2">{item.title}</h3>
-                  <p className="text-gray-600 mb-2">{item.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-gray-800">${item.price}</span>
-                    <span className="text-sm text-gray-500">{item.location}</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          ))}
         </div>
+      </div>
 
-        {/* Middle Advertisement Banner */}
-        <div className="mt-16 bg-gradient-to-r from-purple-500 to-blue-500 h-60 rounded-lg shadow-md">
-          <div className="h-full flex flex-col items-center justify-center text-white space-y-4">
-            <h2 className="text-2xl font-semibold">Advertise Here</h2>
-            <p className="text-lg">Get your products noticed by our growing community</p>
-            <Link to="/contact" className="mt-4 bg-white text-purple-600 px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors duration-300">
-              Contact Us
+      {/* Banner */}
+      <div className="container mx-auto px-4 mb-16">
+        <div className="bg-gradient-to-r from-purple-600 to-blue-500 py-12 rounded-lg">
+          <div className="max-w-7xl mx-auto px-4 text-center text-white">
+            <h2 className="text-3xl font-bold mb-4">Ready to sell?</h2>
+            <p className="text-xl mb-6">List your items and reach thousands of buyers in St. Vincent and the Grenadines</p>
+            <Link
+              to="/post-ad"
+              className="inline-block bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
+            >
+              Post an Ad
             </Link>
           </div>
         </div>
+      </div>
 
-        {/* Hot Deals Section */}
-        <div className="mt-16">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-orange-600">Hot Deals</h2>
-            <Link to="/hot-deals" className="text-orange-600 hover:text-orange-700 font-medium">
-              View All
-              <ChevronRight className="w-5 h-5 inline-block ml-1" />
+      {/* Hot Deals */}
+      <div className="container mx-auto px-4 mb-16">
+        <h2 className="text-2xl font-bold text-orange-500 mb-8">
+          Hot Deals
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {hotDeals.slice(0, 8).map((deal) => (
+            <Link
+              key={deal.id}
+              to={`/listing/${deal.id}`}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow relative"
+            >
+              <div className="absolute top-4 right-4 bg-orange-500 text-white px-2 py-1 rounded-md text-sm font-semibold">
+                {deal.discount}
+              </div>
+              <img
+                src={deal.images[0]}
+                alt={deal.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-medium text-gray-800 mb-2">
+                  {deal.title}
+                </h3>
+                <p className="text-gray-600 text-sm mb-2">
+                  {deal.description}
+                </p>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-xl font-bold text-orange-500">
+                      ${deal.price.toLocaleString()}
+                    </span>
+                    <span className="text-sm text-gray-400 line-through ml-2">
+                      ${deal.originalPrice.toLocaleString()}
+                    </span>
+                  </div>
+                  <span className="text-sm text-gray-500">
+                    {deal.location}
+                  </span>
+                </div>
+              </div>
             </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {dealsListings.map((item, index) => (
-              <Link
-                key={index}
-                to={`/item/${item.id}`}
-                onClick={() => handleListingClick(item.id)}
-                className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:scale-105"
-              >
-                <div className="relative">
-                  <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-t-lg" />
-                  <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded-full text-sm font-medium">
-                    {item.discount}% OFF
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-medium text-orange-600 mb-2">{item.title}</h3>
-                  <p className="text-gray-600 mb-2">{item.description}</p>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="text-lg font-bold text-gray-800">${item.price}</span>
-                      <span className="text-sm text-gray-500 ml-2 line-through">${Math.round(item.price * (1 + item.discount/100))}</span>
-                    </div>
-                    <span className="text-sm text-gray-500">{item.location}</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     </div>

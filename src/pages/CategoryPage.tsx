@@ -1,12 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Listing } from '../types/auth';
-import ListingCard from '../components/ListingCard';
-import FilterSidebar from '../components/FilterSidebar';
-import { useState } from 'react';
+import { Listing } from '../types';
 
 // Mock function to fetch listings - replace with actual API call
-const fetchListings = async (categoryId: string, subcategoryId?: string): Promise<Listing[]> => {
+const fetchListings = async (category: string): Promise<Listing[]> => {
   // This would be replaced with an actual API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -16,20 +13,13 @@ const fetchListings = async (categoryId: string, subcategoryId?: string): Promis
           title: 'Sample Listing',
           description: 'This is a sample listing',
           price: 100,
-          category: categoryId,
-          subcategory: subcategoryId || '',
-          condition: 'new',
+          category: category,
           images: ['/placeholder.jpg'],
-          location: {
-            address: 'Kingstown, St. Vincent',
-          },
-          userId: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          status: 'active',
-          featured: false,
+          location: 'Kingstown',
           views: 0,
-          favorites: 0,
+          contactInfo: 'contact@email.com',
+          isOnSale: false,
+          isFeatured: false
         },
       ]);
     }, 1000);
@@ -37,39 +27,53 @@ const fetchListings = async (categoryId: string, subcategoryId?: string): Promis
 };
 
 export default function CategoryPage() {
-  const { categoryId, subcategoryId } = useParams();
-  const [filters, setFilters] = useState({
-    minPrice: '',
-    maxPrice: '',
-    condition: '',
-    location: '',
-  });
+  const { category } = useParams();
 
   const { data: listings, isLoading } = useQuery({
-    queryKey: ['listings', categoryId, subcategoryId, filters],
-    queryFn: () => fetchListings(categoryId!, subcategoryId),
+    queryKey: ['listings', category],
+    queryFn: () => fetchListings(category || ''),
   });
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <p className="text-gray-600">Loading listings...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex gap-6">
-      <FilterSidebar filters={filters} onFilterChange={setFilters} />
-      <div className="flex-1">
-        <h1 className="text-2xl font-bold mb-6 capitalize">
-          {subcategoryId || categoryId} Listings
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {listings?.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} />
-          ))}
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8 capitalize">
+        {category?.replace('-', ' ')} Listings
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {listings?.map((listing) => (
+          <div
+            key={listing.id}
+            className="bg-white rounded-lg shadow-md overflow-hidden"
+          >
+            <img
+              src={listing.images[0]}
+              alt={listing.title}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-4">
+              <h3 className="text-lg font-medium text-gray-800 mb-2">
+                {listing.title}
+              </h3>
+              <p className="text-gray-600 text-sm mb-2">{listing.description}</p>
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-bold text-purple-600">
+                  ${listing.price.toLocaleString()}
+                </span>
+                <span className="text-sm text-gray-500">{listing.location}</span>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

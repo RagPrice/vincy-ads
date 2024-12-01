@@ -5,7 +5,6 @@ import Home from './pages/Home'
 import FeaturedItems from './pages/FeaturedItems'
 import HotDeals from './pages/HotDeals'
 import CategoryPage from './pages/categories/CategoryPage'
-import Events from './pages/categories/Events'
 
 function App() {
   return (
@@ -19,7 +18,6 @@ function App() {
             <Route path="/listings/hot-deals" element={<HotDeals />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/category/:category/:subcategory" element={<CategoryPage />} />
-            <Route path="/events" element={<Events />} />
           </Routes>
         </main>
         <Footer />

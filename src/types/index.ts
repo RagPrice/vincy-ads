@@ -5,12 +5,19 @@ export interface Listing {
   price: number;
   images: string[];
   location: string;
-  contactInfo: string;
   category: string;
-  isOnSale: boolean;
-  createdAt: string;
-  userId?: string;
+  contactInfo: string;
   views: number;
+  isOnSale: boolean;
+  isFeatured: boolean;
+  discount?: number;
+  subcategory?: string;
+  condition?: string;
+  userId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  status?: string;
+  favorites?: number;
 }
 
 export interface ListingFormData {

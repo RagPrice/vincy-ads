@@ -5,44 +5,31 @@ import ListingCard from '../../components/ListingCard';
 import FilterSidebar from '../../components/FilterSidebar';
 import { useState } from 'react';
 
-const fetchEventListings = async (): Promise<Listing[]> => {
+const fetchFashionListings = async (): Promise<Listing[]> => {
   // This would be replaced with an actual API call
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
         {
           id: '1',
-          title: 'Bequia Music Festival',
-          description: 'Annual music festival featuring local and international artists',
-          price: 50,
-          images: ['/events/music-festival.jpg'],
-          location: 'Bequia',
-          category: 'events',
-          views: 450,
-          contactInfo: 'events@email.com',
-          isOnSale: false,
-          isFeatured: true
-        },
-        {
-          id: '2',
-          title: 'Vincy Mas',
-          description: 'The hottest carnival in the Caribbean',
-          price: 100,
-          images: ['/events/carnival.jpg'],
+          title: 'Designer Watch',
+          description: 'Luxury automatic watch',
+          price: 1299,
+          images: ['/fashion/watch.jpg'],
           location: 'Kingstown',
-          category: 'events',
-          views: 800,
-          contactInfo: 'carnival@email.com',
-          isOnSale: false,
-          isFeatured: true
+          category: 'fashion',
+          views: 150,
+          contactInfo: 'fashion@email.com',
+          isOnSale: true,
+          isFeatured: false
         },
-        // Add more mock event listings
+        // Add more mock fashion listings
       ]);
     }, 1000);
   });
 };
 
-export default function Events() {
+export default function Fashion() {
   const [filters, setFilters] = useState({
     minPrice: '',
     maxPrice: '',
@@ -51,8 +38,8 @@ export default function Events() {
   });
 
   const { data: listings, isLoading } = useQuery({
-    queryKey: ['events', filters],
-    queryFn: fetchEventListings
+    queryKey: ['fashion', filters],
+    queryFn: fetchFashionListings
   });
 
   if (isLoading) {
@@ -68,7 +55,7 @@ export default function Events() {
       <div className="flex gap-6">
         <FilterSidebar filters={filters} onFilterChange={setFilters} />
         <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-8">Events</h1>
+          <h1 className="text-3xl font-bold mb-8">Fashion & Accessories</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {listings?.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />

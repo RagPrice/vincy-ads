@@ -85,15 +85,15 @@ export default function Profile() {
       </div>
 
       {/* Listings Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+      <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="w-full">
           <TabsTrigger value="active">Active Listings</TabsTrigger>
           <TabsTrigger value="sold">Sold</TabsTrigger>
           <TabsTrigger value="expired">Expired</TabsTrigger>
           <TabsTrigger value="draft">Drafts</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="active">
+        <TabsContent value="active" className="mt-6">
           {isLoading ? (
             <div className="flex justify-center items-center min-h-[200px]">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
