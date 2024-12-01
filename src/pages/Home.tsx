@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { incrementViews } from '../utils/storage';
 import { Listing } from '../types';
@@ -45,11 +45,8 @@ const categories: Category[] = [
     name: 'Vehicles',
     path: '/category/vehicles',
     subcategories: [
-      'Cars',
-      'Motorcycles',
-      'Boats',
-      'Trucks',
-      'Recreational Vehicles'
+      'For Sale',
+      'For Rent'
     ]
   },
   {
@@ -166,11 +163,11 @@ const Home = () => {
   const [featuredListings] = useState<Listing[]>([
     {
       id: '1',
-      title: 'Luxury Apartment',
-      description: 'Modern 3-bedroom apartment with ocean view',
-      price: 450000,
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Kingstown',
+      title: 'Luxury Beach House',
+      description: 'Beautiful 3-bedroom villa with ocean view',
+      price: 750000,
+      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      location: 'Bequia',
       category: 'Real Estate',
       contactInfo: 'contact@email.com',
       featured: true,
@@ -178,12 +175,12 @@ const Home = () => {
     },
     {
       id: '2',
-      title: '2020 Toyota Camry',
-      description: 'Well-maintained, low mileage',
-      price: 25000,
-      image: 'https://placehold.co/600x400',
-      location: 'Bequia',
-      category: 'Vehicles',
+      title: 'Modern Office Space',
+      description: 'Prime location, fully furnished',
+      price: 299000,
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      location: 'Kingstown',
+      category: 'Real Estate',
       contactInfo: 'contact@email.com',
       featured: true,
       views: 120
@@ -199,73 +196,12 @@ const Home = () => {
       contactInfo: 'contact@email.com',
       featured: true,
       views: 100
-    },
-    {
-      id: '4',
-      title: '2022 Toyota RAV4',
-      description: 'Like new, only 5000 miles, full service history',
-      price: 45000,
-      image: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Kingstown',
-      category: 'Vehicles',
-      contactInfo: 'contact@email.com',
-      featured: true,
-      views: 80
-    },
-    {
-      id: '5',
-      title: 'MacBook Pro M2',
-      description: '16-inch, 32GB RAM, 1TB SSD, AppleCare+',
-      price: 2499,
-      image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Arnos Vale',
-      category: 'Electronics',
-      contactInfo: 'contact@email.com',
-      featured: true,
-      views: 90
-    },
-    {
-      id: '6',
-      title: 'Modern Office Chair',
-      description: 'Ergonomic design with lumbar support',
-      price: 299,
-      image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      location: 'Calliaqua',
-      category: 'Furniture & Home',
-      contactInfo: 'contact@email.com',
-      featured: true,
-      views: 80
-    },
-    // Add more featured listings as needed
+    }
   ]);
 
   const [dealsListings] = useState<Listing[]>([
     {
-      id: '7',
-      title: 'iPhone 13 Pro',
-      description: 'Brand new, sealed in box',
-      price: 999,
-      image: 'https://placehold.co/600x400',
-      location: 'Kingstown',
-      category: 'Electronics',
-      contactInfo: 'contact@email.com',
-      discount: 10,
-      views: 200
-    },
-    {
-      id: '8',
-      title: 'Modern Office Desk',
-      description: 'Perfect for home office',
-      price: 299,
-      image: 'https://placehold.co/600x400',
-      location: 'Calliaqua',
-      category: 'Furniture & Home',
-      contactInfo: 'contact@email.com',
-      discount: 20,
-      views: 80
-    },
-    {
-      id: '9',
+      id: '4',
       title: 'iPhone 14 Pro',
       description: '256GB, Midnight, Unlocked',
       price: 899,
@@ -274,10 +210,10 @@ const Home = () => {
       category: 'Electronics',
       contactInfo: 'contact@email.com',
       discount: 20,
-      views: 100
+      views: 200
     },
     {
-      id: '10',
+      id: '5',
       title: 'Designer Sofa Set',
       description: '3-piece modern living room set',
       price: 1299,
@@ -286,11 +222,11 @@ const Home = () => {
       category: 'Furniture & Home',
       contactInfo: 'contact@email.com',
       discount: 30,
-      views: 90
+      views: 150
     },
     {
-      id: '11',
-      title: 'Samsung 65\" QLED TV',
+      id: '6',
+      title: 'Samsung 65" QLED TV',
       description: '4K Smart TV with HDR',
       price: 799,
       image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
@@ -298,22 +234,22 @@ const Home = () => {
       category: 'Electronics',
       contactInfo: 'contact@email.com',
       discount: 25,
-      views: 110
+      views: 180
     },
     {
-      id: '12',
+      id: '7',
       title: 'Mountain Bike',
-      description: '29\" Premium Mountain Bike',
+      description: '29" Premium Mountain Bike',
       price: 449,
       image: 'https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
       location: 'Layou',
       category: 'Sports',
       contactInfo: 'contact@email.com',
       discount: 15,
-      views: 80
+      views: 120
     },
     {
-      id: '13',
+      id: '8',
       title: 'Gold Necklace',
       description: '18K Gold Chain, 20 inches',
       price: 599,
@@ -322,10 +258,10 @@ const Home = () => {
       category: 'Fashion & Accessories',
       contactInfo: 'contact@email.com',
       discount: 40,
-      views: 120
+      views: 160
     },
     {
-      id: '14',
+      id: '9',
       title: 'Gaming Console',
       description: 'Latest gen with 2 controllers',
       price: 399,
@@ -334,10 +270,10 @@ const Home = () => {
       category: 'Electronics',
       contactInfo: 'contact@email.com',
       discount: 20,
-      views: 100
+      views: 140
     },
     {
-      id: '15',
+      id: '10',
       title: 'Dining Set',
       description: '6-seater wooden dining set',
       price: 899,
@@ -346,10 +282,10 @@ const Home = () => {
       category: 'Furniture & Home',
       contactInfo: 'contact@email.com',
       discount: 35,
-      views: 90
+      views: 130
     },
     {
-      id: '16',
+      id: '11',
       title: 'Designer Watch',
       description: 'Luxury automatic watch',
       price: 1299,
@@ -358,29 +294,26 @@ const Home = () => {
       category: 'Fashion & Accessories',
       contactInfo: 'contact@email.com',
       discount: 25,
-      views: 110
-    },
-    // Add more deal listings as needed
+      views: 170
+    }
   ]);
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setSelectedCategory(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleCategoryClick = (categoryName: string) => {
-    if (selectedCategory === categoryName) {
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(categoryName);
-      setSelectedSubcategory(null);
-    }
-  };
-
-  const handleSubcategoryClick = (subcategoryName: string) => {
-    if (selectedSubcategory === subcategoryName) {
-      setSelectedSubcategory(null);
-    } else {
-      setSelectedSubcategory(subcategoryName);
-    }
+    setSelectedCategory(prev => prev === categoryName ? null : categoryName);
   };
 
   const handleListingClick = (id: string) => {
@@ -397,7 +330,7 @@ const Home = () => {
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">
+      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16 h-64 mb-8">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-4">Find What You Need</h1>
           <p className="text-xl">Browse local listings or post your own advertisement</p>
@@ -411,7 +344,11 @@ const Home = () => {
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">Categories</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {categories.map((category) => (
-              <div key={category.name} className="relative group">
+              <div 
+                key={category.name} 
+                className="relative group"
+                ref={selectedCategory === category.name ? dropdownRef : null}
+              >
                 <div 
                   onClick={() => handleCategoryClick(category.name)}
                   className="w-full h-full flex flex-col items-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg hover:scale-105 hover:bg-gray-50 transition-all duration-300 cursor-pointer"
@@ -432,13 +369,19 @@ const Home = () => {
                 
                 {/* Primary Dropdown */}
                 {category.subcategories.length > 0 && selectedCategory === category.name && (
-                  <div className="absolute z-50 w-48 left-0 top-full mt-2">
+                  <div 
+                    className="absolute z-50 w-48 left-0 top-full mt-2 transform transition-all duration-200 opacity-100"
+                    role="menu"
+                    aria-orientation="vertical"
+                  >
                     <div className="bg-white rounded-lg shadow-lg py-2">
                       {category.subcategories.map((subcat, index) => (
                         <Link
                           key={index}
                           to={`${category.path}/${typeof subcat === 'string' ? subcat : subcat.name}`.toLowerCase().replace(/ /g, '-')}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                          role="menuitem"
+                          tabIndex={-1}
                         >
                           {typeof subcat === 'string' ? subcat : subcat.name}
                         </Link>
@@ -462,7 +405,12 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-3 gap-6">
             {featuredListings.slice(0, 3).map((item, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <Link
+                key={index}
+                to={`/item/${item.id}`}
+                onClick={() => handleListingClick(item.id)}
+                className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:scale-105"
+              >
                 <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-t-lg" />
                 <div className="p-4">
                   <h3 className="text-lg font-medium text-purple-600 mb-2">{item.title}</h3>
@@ -472,7 +420,7 @@ const Home = () => {
                     <span className="text-sm text-gray-500">{item.location}</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -499,7 +447,12 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {dealsListings.map((item, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <Link
+                key={index}
+                to={`/item/${item.id}`}
+                onClick={() => handleListingClick(item.id)}
+                className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:scale-105"
+              >
                 <div className="relative">
                   <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-t-lg" />
                   <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded-full text-sm font-medium">
@@ -517,7 +470,7 @@ const Home = () => {
                     <span className="text-sm text-gray-500">{item.location}</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
