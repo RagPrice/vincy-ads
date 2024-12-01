@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { incrementViews } from '../utils/storage';
 import BackButton from '../components/BackButton';
@@ -82,16 +81,19 @@ const HotDeals = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Back Button */}
-      <div className="container mx-auto px-4 pt-4">
+      <div className="container mx-auto px-4 py-6">
         <BackButton />
       </div>
 
       {/* Top Advertisement Banner */}
-      <div className="w-full bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 text-center">
-        <h2 className="text-2xl text-gray-600 font-semibold">Advertise Here</h2>
+      <div className="container mx-auto px-4">
+        <div className="bg-gray-200 rounded-lg p-8 text-center h-48 flex items-center justify-center">
+          <span className="text-gray-600 text-2xl">Advertise Here</span>
+        </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      {/* Main Content */}
+      <div className="container mx-auto px-4 space-y-16">
         <div className="flex gap-8">
           {/* Left Column - Square Ads */}
           <div className="hidden md:flex flex-col gap-8 w-64 flex-shrink-0">
@@ -105,8 +107,8 @@ const HotDeals = () => {
 
           {/* Main Content */}
           <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-8 text-orange-600">Hot Deals</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <h1 className="text-3xl font-bold text-orange-600 mb-8">Hot Deals</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {hotDeals.map((deal) => (
                 <Link
                   key={deal.id}
@@ -114,12 +116,15 @@ const HotDeals = () => {
                   className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                   onClick={() => incrementViews(deal.id)}
                 >
-                  <div className="relative h-40">
+                  <div className="relative h-48">
                     <img
                       src={deal.images[0]}
                       alt={deal.title}
                       className="w-full h-full object-cover"
                     />
+                    <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-md text-sm">
+                      Hot Deal!
+                    </div>
                   </div>
                   <div className="p-4">
                     <h3 className="text-lg font-semibold mb-2 text-orange-600">{deal.title}</h3>

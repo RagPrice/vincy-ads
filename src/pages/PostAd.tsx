@@ -71,7 +71,8 @@ const PostAd: React.FC = () => {
       images: formData.images,
       isOnSale: formData.isOnSale,
       createdAt: new Date().toISOString(),
-      views: 0
+      views: 0,
+      isFeatured: false
     };
 
     addListing(newListing);
