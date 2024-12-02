@@ -1,35 +1,50 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 import { Listing } from '../../types';
 import ListingCard from '../../components/ListingCard';
 import FilterSidebar from '../../components/FilterSidebar';
 import { useState } from 'react';
 
-const fetchServiceListings = async (): Promise<Listing[]> => {
-  // This would be replaced with an actual API call
+const fetchServiceListings = async (subcategory?: string): Promise<Listing[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
         {
           id: '1',
-          title: 'Professional Photography',
-          description: 'Events, portraits, and commercial photography',
-          price: 200,
-          images: ['/services/photography.jpg'],
+          title: 'Professional House Cleaning',
+          description: 'Experienced cleaning service, available weekly',
+          price: 100,
+          images: ['https://images.unsplash.com/photo-1581578731548-c64695cc6952'],
           location: 'Kingstown',
           category: 'services',
-          views: 180,
-          contactInfo: 'photo@email.com',
+          subcategory: 'home-services',
+          views: 85,
+          contactInfo: 'contact@email.com',
           isOnSale: false,
           isFeatured: true
         },
-        // Add more mock service listings
-      ]);
+        {
+          id: '2',
+          title: 'Wedding Photography',
+          description: 'Professional photographer for your special day',
+          price: 1500,
+          images: ['https://images.unsplash.com/photo-1537633552985-df8429e8048b'],
+          location: 'Island-wide',
+          category: 'services',
+          subcategory: 'event-services',
+          views: 150,
+          contactInfo: 'photo@email.com',
+          isOnSale: false,
+          isFeatured: true
+        }
+      ].filter(listing => !subcategory || listing.subcategory === subcategory));
     }, 1000);
   });
 };
 
 export default function Services() {
+  const { subcategory } = useParams();
   const [filters, setFilters] = useState({
     minPrice: '',
     maxPrice: '',
@@ -38,8 +53,8 @@ export default function Services() {
   });
 
   const { data: listings, isLoading } = useQuery({
-    queryKey: ['services', filters],
-    queryFn: fetchServiceListings
+    queryKey: ['services', subcategory, filters],
+    queryFn: () => fetchServiceListings(subcategory)
   });
 
   if (isLoading) {
@@ -52,10 +67,19 @@ export default function Services() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex gap-6">
-        <FilterSidebar filters={filters} onFilterChange={setFilters} />
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          {subcategory ? `Services - ${subcategory.replace(/-/g, ' ')}` : 'Services'}
+        </h1>
+        <p className="text-gray-600">
+          Browse {subcategory ? subcategory.replace(/-/g, ' ') : ''} services in St. Vincent and the Grenadines
+        </p>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-8">
+        <FilterSidebar filters={filters} setFilters={setFilters} />
+        
         <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-8">Services</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {listings?.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />

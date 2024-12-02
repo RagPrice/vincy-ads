@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Car,
@@ -14,7 +14,9 @@ import {
   Calendar,
   Package,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Flame,
+  ArrowRight
 } from 'lucide-react';
 
 const categories = [
@@ -28,7 +30,7 @@ const categories = [
     name: 'Real Estate',
     icon: <HomeIcon />,
     path: '/category/real-estate',
-    subcategories: ['Houses for Sale', 'Apartments for Rent', 'Commercial Properties', 'Land', 'Roommates']
+    subcategories: ['For Rent', 'For Sale', 'Commercial Properties', 'Land', 'Roommates']
   },
   {
     name: 'Electronics',
@@ -37,9 +39,9 @@ const categories = [
     subcategories: ['Computers', 'Smartphones', 'Tablets', 'Audio Equipment', 'Gaming Consoles', 'Accessories']
   },
   {
-    name: 'Furniture',
+    name: 'Furniture & Home',
     icon: <Sofa />,
-    path: '/category/furniture',
+    path: '/category/furniture-home',
     subcategories: ['Living Room', 'Bedroom', 'Kitchen', 'Office Furniture', 'Home Decor', 'Appliances']
   },
   {
@@ -73,15 +75,16 @@ const categories = [
     subcategories: []
   },
   {
-    name: 'Other',
+    name: 'Miscellaneous',
     icon: <Package />,
-    path: '/category/other',
+    path: '/category/miscellaneous',
     subcategories: ['Free Items', 'Collectibles', 'Hobbies', 'Art & Crafts']
   }
 ];
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isDropdownHovered, setIsDropdownHovered] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showCategories, setShowCategories] = useState(false);
   const [featuredListings] = React.useState([
@@ -228,240 +231,163 @@ const Home = () => {
     }
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (document.body.contains(event.target as Node)) {
+        setSelectedCategory(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-12 mb-8">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-4">
+      {/* Top Advertising Banner */}
+      <div className="container mx-auto px-6 py-8">
+        <div className="bg-gradient-to-r from-indigo-500 via-indigo-400 to-indigo-500 p-6 rounded-lg shadow-lg">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-4 md:mb-0 text-center md:text-left">
+              <h3 className="text-2xl font-bold text-white mb-2">Advertise with Us!</h3>
+              <p className="text-white/90">Reach thousands of potential customers in St. Vincent</p>
+            </div>
+            <div className="flex gap-4">
+              <a href="/advertise" className="bg-white text-indigo-600 px-6 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+                Learn More
+              </a>
+              <a href="/contact" className="bg-indigo-700 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+                Contact Us
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Section with Categories */}
+      <div className="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-8">
+        <div className="container mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center mb-6">
+            <h1 className="text-3xl font-bold mb-2">
               Welcome to Vincy Ads Marketplace
             </h1>
-            <p className="text-xl mb-8">
+            <p className="text-lg">
               Your one-stop destination for buying and selling in St. Vincent and
               the Grenadines
             </p>
-            <div className="flex justify-center gap-4">
-              <Link
-                to="/post-ad"
-                className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
+          </div>
+
+          {/* Categories Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-6xl mx-auto">
+            {categories.map((category) => (
+              <Link 
+                key={category.name}
+                to={category.path}
+                className="bg-white/10 backdrop-blur-sm p-4 rounded-lg hover:bg-white/20 transition-all duration-300 transform hover:scale-105 group"
               >
-                Post an Ad
+                <div className="flex flex-col items-center text-center">
+                  <div className="text-2xl mb-2 text-white group-hover:scale-110 transition-transform duration-300">
+                    {category.icon}
+                  </div>
+                  <h3 className="text-xs font-semibold text-white">
+                    {category.name}
+                  </h3>
+                </div>
               </Link>
-              <button
-                onClick={() => setShowCategories(!showCategories)}
-                className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
-              >
-                Browse Categories
-              </button>
-            </div>
+            ))}
           </div>
         </div>
       </div>
-
-      {/* Categories */}
-      {showCategories && (
-        <div className="container mx-auto px-4 mb-16">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-purple-600">Categories</h2>
-            <div className="flex gap-2">
-              <button
-                onClick={() => scroll('left')}
-                className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-              <button
-                onClick={() => scroll('right')}
-                className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className="relative group">
-            <div 
-              ref={scrollContainerRef}
-              className="flex flex-nowrap overflow-x-auto gap-2 pb-4 no-scrollbar"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {categories.map((category) => (
-                <div key={category.name} className="flex-shrink-0 w-32">
-                  <div 
-                    className="relative hover:text-purple-600 transition-colors"
-                    onClick={() => setSelectedCategory(selectedCategory === category.name ? null : category.name)}
-                  >
-                    <div className="block bg-white p-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer text-center transform hover:-translate-y-1">
-                      <div className="text-3xl mb-2 flex justify-center items-center text-current">
-                        {category.icon}
-                      </div>
-                      <h3 className="text-sm font-semibold text-current">
-                        {category.name}
-                      </h3>
-                    </div>
-                    
-                    {/* Subcategories Dropdown */}
-                    {category.subcategories.length > 0 && selectedCategory === category.name && (
-                      <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg z-20 p-3 transform transition-all duration-300 opacity-100 translate-y-0">
-                        <ul className="space-y-1.5">
-                          {category.subcategories.map((sub) => (
-                            <li key={sub}>
-                              <Link 
-                                to={`${category.path}/${sub.toLowerCase().replace(/ /g, '-')}`}
-                                className="text-sm text-gray-600 hover:text-purple-600 block py-1.5 px-3 hover:bg-purple-50 rounded-md transition-all duration-200"
-                              >
-                                {sub}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Scroll Buttons */}
-            <button
-              onClick={() => scroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-purple-600 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity -ml-4 z-10"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-purple-600 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity -mr-4 z-10"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Featured Listings */}
-      <div className="container mx-auto px-4 mb-16">
-        <h2 className="text-2xl font-bold text-purple-600 mb-8">
-          Featured Listings
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {featuredListings.map((listing) => (
-            <Link
-              key={listing.id}
-              to={`/listing/${listing.id}`}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-            >
-              <img
-                src={listing.images[0]}
-                alt={listing.title}
-                className="w-full h-56 object-cover"
-              />
-              <div className="p-5">
-                <h3 className="text-lg font-medium text-gray-800 mb-2">
-                  {listing.title}
-                </h3>
-                <p className="text-gray-600 text-sm mb-3">
-                  {listing.description}
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-purple-600">
-                    ${listing.price.toLocaleString()}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {listing.location}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Banner */}
-      <div className="container mx-auto px-4 mb-16">
-        <div className="bg-gradient-to-r from-purple-600 to-blue-500 py-12 rounded-lg">
-          <div className="max-w-7xl mx-auto px-4 text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">Ready to sell?</h2>
-            <p className="text-xl mb-6">List your items and reach thousands of buyers in St. Vincent and the Grenadines</p>
-            <Link
-              to="/post-ad"
-              className="inline-block bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
-            >
-              Post an Ad
+      <div className="container mx-auto px-6 py-16">
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-purple-600">Featured Listings</h2>
+            <Link to="/featured" className="text-purple-600 hover:text-purple-700 flex items-center gap-2 font-medium">
+              View All
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-        </div>
-      </div>
-
-      {/* Hot Deals */}
-      <div className="container mx-auto px-4 mb-16">
-        <h2 className="text-2xl font-bold text-orange-500 mb-8">
-          Hot Deals
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {hotDeals.slice(0, 8).map((deal) => (
-            <Link
-              key={deal.id}
-              to={`/listing/${deal.id}`}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow relative"
-            >
-              <div className="absolute top-4 right-4 bg-orange-500 text-white px-2 py-1 rounded-md text-sm font-semibold">
-                {deal.discount}
-              </div>
-              <img
-                src={deal.images[0]}
-                alt={deal.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-2">
-                  {deal.title}
-                </h3>
-                <p className="text-gray-600 text-sm mb-2">
-                  {deal.description}
-                </p>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <span className="text-xl font-bold text-orange-500">
-                      ${deal.price.toLocaleString()}
-                    </span>
-                    <span className="text-sm text-gray-400 line-through ml-2">
-                      ${deal.originalPrice.toLocaleString()}
-                    </span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {featuredListings.map((listing) => (
+              <div key={listing.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-102 hover:-translate-y-1">
+                <img
+                  src={listing.images[0]}
+                  alt={listing.title}
+                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-2">{listing.title}</h3>
+                  <p className="text-gray-600 mb-4">{listing.description}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-purple-600 font-bold">${listing.price}</span>
+                    <span className="text-gray-500">{listing.location}</span>
                   </div>
-                  <span className="text-sm text-gray-500">
-                    {deal.location}
-                  </span>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Ad Banner */}
+        <div className="bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 rounded-lg shadow-lg p-6 mb-16 transform transition-all duration-300 hover:scale-101">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-4 md:mb-0 text-center md:text-left">
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">Want to Sell Fast?</h3>
+              <p className="text-gray-700">List your items and reach thousands of potential buyers today!</p>
+            </div>
+            <div className="flex gap-4">
+              <Link to="/post-ad" className="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                Post an Ad
+              </Link>
+              <Link to="/premium" className="bg-white text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                Go Premium
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Hot Deals */}
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-orange-500 flex items-center gap-2">
+              <Flame className="w-6 h-6 text-orange-500" />
+              Hot Deals
+            </h2>
+            <Link to="/hot-deals" className="text-orange-500 hover:text-orange-600 flex items-center gap-2 font-medium">
+              View All
+              <ArrowRight className="w-4 h-4" />
             </Link>
-          ))}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {hotDeals.map((deal) => (
+              <div key={deal.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-102 hover:-translate-y-1">
+                <div className="relative overflow-hidden">
+                  <img
+                    src={deal.images[0]}
+                    alt={deal.title}
+                    className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
+                  />
+                  <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-md text-sm transform transition-transform duration-300 hover:scale-105">
+                    {deal.discount}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-2">{deal.title}</h3>
+                  <p className="text-gray-600 mb-4">{deal.description}</p>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <span className="text-purple-600 font-bold">${deal.price}</span>
+                      <span className="text-gray-400 line-through ml-2">${deal.originalPrice}</span>
+                    </div>
+                    <span className="text-gray-500">{deal.location}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

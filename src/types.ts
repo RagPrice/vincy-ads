@@ -6,10 +6,13 @@ export interface Listing {
   images: string[];
   location: string;
   category: string;
-  contactInfo: string;
-  isFeatured: boolean;
+  subcategory?: string;
   views: number;
+  contactInfo: string;
   isOnSale?: boolean;
+  isFeatured?: boolean;
+  originalPrice?: number;
+  discount?: string;
   createdAt?: string;
 }
 
@@ -24,6 +27,18 @@ export interface SignupFormData {
   email: string;
   password: string;
   name: string;
+}
+
+export interface FilterState {
+  minPrice: string;
+  maxPrice: string;
+  condition: string;
+  location: string;
+}
+
+export interface FilterSidebarProps {
+  filters: FilterState;
+  setFilters: (filters: FilterState) => void;
 }
 
 export const CATEGORIES = [

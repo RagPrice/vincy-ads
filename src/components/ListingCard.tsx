@@ -1,62 +1,63 @@
-import { Link } from 'react-router-dom';
-import { Heart, Eye } from 'lucide-react';
-import { Listing } from '../types/auth';
-import { formatDistanceToNow } from 'date-fns';
+import React from 'react';
+import { Listing } from '../types';
+import { Eye, MapPin, Tag } from 'lucide-react';
 
 interface ListingCardProps {
   listing: Listing;
 }
 
-const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
+export default function ListingCard({ listing }: ListingCardProps) {
   return (
-    <Link
-      to={`/listing/${listing.id}`}
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-    >
-      <div className="relative h-48">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      {/* Image */}
+      <div className="relative h-48 overflow-hidden">
         <img
           src={listing.images[0]}
           alt={listing.title}
           className="w-full h-full object-cover"
         />
-        {listing.featured && (
-          <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded text-xs font-semibold">
+        {listing.isFeatured && (
+          <div className="absolute top-2 right-2 bg-purple-600 text-white px-2 py-1 rounded text-xs font-semibold">
             Featured
-          </span>
+          </div>
         )}
       </div>
-      
+
+      {/* Content */}
       <div className="p-4">
-        <h3 className="text-lg font-semibold mb-1 line-clamp-1">{listing.title}</h3>
-        <p className="text-gray-600 text-sm mb-2 line-clamp-2">{listing.description}</p>
+        <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-1">
+          {listing.title}
+        </h3>
         
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-lg font-bold text-blue-600">
-            ${listing.price.toLocaleString()}
-          </span>
-          <span className="text-sm text-gray-500">
-            {listing.location.address}
-          </span>
-        </div>
-        
-        <div className="flex justify-between items-center text-sm text-gray-500">
-          <div className="flex items-center space-x-4">
-            <span className="flex items-center">
-              <Eye className="w-4 h-4 mr-1" />
-              {listing.views}
-            </span>
-            <span className="flex items-center">
-              <Heart className="w-4 h-4 mr-1" />
-              {listing.favorites}
+        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+          {listing.description}
+        </p>
+
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center text-purple-600">
+            <Tag className="w-4 h-4 mr-1" />
+            <span className="font-semibold">
+              ${listing.price.toLocaleString()}
             </span>
           </div>
-          <span>
-            {formatDistanceToNow(new Date(listing.createdAt), { addSuffix: true })}
-          </span>
+          <div className="flex items-center text-gray-500 text-sm">
+            <Eye className="w-4 h-4 mr-1" />
+            <span>{listing.views} views</span>
+          </div>
+        </div>
+
+        <div className="flex items-center text-gray-500 text-sm">
+          <MapPin className="w-4 h-4 mr-1" />
+          <span>{listing.location}</span>
         </div>
       </div>
-    </Link>
-  );
-};
 
-export default ListingCard;
+      {/* Action Button */}
+      <div className="px-4 pb-4">
+        <button className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200">
+          View Details
+        </button>
+      </div>
+    </div>
+  );
+}
